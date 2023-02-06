@@ -1,8 +1,10 @@
 package com.bankly.walletservice.controller;
 
 import com.bankly.walletservice.dto.ResponceDto;
+import com.bankly.walletservice.dto.WalletDto;
 import com.bankly.walletservice.entities.Wallet;
 import com.bankly.walletservice.services.IWalletService;
+import com.bankly.walletservice.utile.DtoToEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,8 +16,9 @@ public class WalletController {
         this.walletService = walletService;
     }
 
-    @PostMapping("add-wallet")
-    public ResponceDto addWallet(@RequestBody Wallet wallet){
+    @PostMapping("/add-wallet")
+    public ResponceDto addWallet(@RequestBody WalletDto walletdto){
+        Wallet wallet = DtoToEntity.walletDtoToWalletEntity(walletdto);
         return walletService.addWallet(wallet);
     }
 
@@ -24,7 +27,7 @@ public class WalletController {
         return walletService.findWalletByCinClient(cin);
     }
 
-    @GetMapping("all-wallet")
+    @GetMapping("/all-wallet")
     public ResponceDto findAllWallet(){
         return walletService.findAllWallet();
     }
