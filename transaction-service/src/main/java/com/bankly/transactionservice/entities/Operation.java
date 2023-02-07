@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Document("operation")
 public class Operation implements Serializable {
     @Id
-    private Long id;
+    private String id;
     private String reference;
     private LocalDate dateTransaction;
     private Double amount;
@@ -25,11 +25,11 @@ public class Operation implements Serializable {
     public Operation() {
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

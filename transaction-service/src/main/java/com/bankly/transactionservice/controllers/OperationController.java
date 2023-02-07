@@ -34,7 +34,7 @@ public class OperationController {
     }
 
     @GetMapping("/find_one/id/{id}")
-    public ResponseDto findOneOperation(@PathVariable Long id){
+    public ResponseDto findOneOperation(@PathVariable String  id){
         return operationService.findOne(id);
     }
 }

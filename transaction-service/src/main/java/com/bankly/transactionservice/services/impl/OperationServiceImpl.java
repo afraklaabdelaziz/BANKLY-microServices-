@@ -53,7 +53,7 @@ public class OperationServiceImpl implements IOperationService {
     }
 
     @Override
-    public ResponseDto findOne(Long idOperation) {
+    public ResponseDto findOne(String idOperation) {
         Optional<Operation> operation = operationRepository.findById(idOperation);
         if (!operation.isPresent()){
             return new ResponseDto("bad request","this operation not exist");

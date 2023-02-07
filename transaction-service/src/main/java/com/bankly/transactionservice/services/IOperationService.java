@@ -7,5 +7,5 @@ public interface IOperationService {
     public ResponseDto addOperation(Operation operation);
     public ResponseDto updateOperation(Operation operation);
     public ResponseDto findAllOperations();
-    public ResponseDto findOne(Long idOperation);
+    public ResponseDto findOne(String idOperation);
 }
