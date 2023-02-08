@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+  eureka:
+    image: eureka
+    build: eureka-server/
+    ports:
+      - "8761:8761"
+
+  transaction:
+    image: transaction-service
+    build: transaction-service/
+    ports:
+      - "8090:8090"
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_DB=bankly
+
+  wallet:
+    image: wallet
+    build: wallet-service/
+    ports:
+      - "8088:8088"
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8.0.30
+    volumes:
+      - ./config/mysql:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=bankly
+    ports:
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-ppass"] # Command to check health.
+      interval: 5s # Interval between health checks.
+      timeout: 5s # Timeout for each health checking.
+      retries: 20 # Hou many times retries.
+
+networks:
+  employee-mysql:
