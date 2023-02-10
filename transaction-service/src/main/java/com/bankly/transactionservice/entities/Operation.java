@@ -13,13 +13,16 @@ public class Operation implements Serializable {
     private String reference;
     private LocalDate dateTransaction;
     private Double amount;
+
+    private String walletRef;
     private OperationType operationType;
 
-    public Operation(String reference, LocalDate dateTransaction, Double amount, OperationType opperationType) {
+    public Operation(String reference, LocalDate dateTransaction, Double amount, String walletRef, OperationType operationType) {
         this.reference = reference;
         this.dateTransaction = dateTransaction;
         this.amount = amount;
-        this.operationType = opperationType;
+        this.walletRef = walletRef;
+        this.operationType = operationType;
     }
 
     public Operation() {
@@ -63,6 +66,15 @@ public class Operation implements Serializable {
 
     public void setOpperationType(OperationType opperationType) {
         this.operationType = opperationType;
+    }
+
+
+    public String getWalletRef() {
+        return walletRef;
+    }
+
+    public void setWalletRef(String walletRef) {
+        this.walletRef = walletRef;
     }
 
     @Override

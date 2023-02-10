@@ -6,6 +6,8 @@ public class OperationDto implements Serializable {
     private String operationType;
     private Double amount;
 
+    private String walletRef;
+
     public OperationDto(String operationType, Double amount) {
         this.operationType = operationType;
         this.amount = amount;
@@ -28,5 +30,13 @@ public class OperationDto implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getWalletRef() {
+        return walletRef;
+    }
+
+    public void setWalletRef(String walletRef) {
+        this.walletRef = walletRef;
     }
 }

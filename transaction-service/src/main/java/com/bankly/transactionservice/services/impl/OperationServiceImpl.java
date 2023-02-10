@@ -1,7 +1,10 @@
 package com.bankly.transactionservice.services.impl;
 
+import com.bankly.transactionservice.controllers.WalletProxy;
 import com.bankly.transactionservice.dto.ResponseDto;
+import com.bankly.transactionservice.dto.WalletDto;
 import com.bankly.transactionservice.entities.Operation;
+import com.bankly.transactionservice.entities.OperationType;
 import com.bankly.transactionservice.repositories.OperationRepository;
 import com.bankly.transactionservice.services.IOperationService;
 import org.springframework.stereotype.Service;
@@ -12,9 +15,11 @@ import java.util.Optional;
 @Service
 public class OperationServiceImpl implements IOperationService {
     private OperationRepository operationRepository;
+    private final WalletProxy walletProxy;
 
-    public OperationServiceImpl(OperationRepository operationRepository) {
+    public OperationServiceImpl(OperationRepository operationRepository, WalletProxy walletProxy) {
         this.operationRepository = operationRepository;
+        this.walletProxy = walletProxy;
     }
 
     @Override
@@ -36,9 +41,15 @@ public class OperationServiceImpl implements IOperationService {
         }
 
         else {
+            if (operation.getOperationType() == OperationType.DEPOSIT){
+                this.deposit(operation.getWalletRef(), operation.getAmount());
+            }else {
+                operation.setOpperationType(OperationType.WITHDRAW);
+                this.withdraw(operation.getWalletRef(), operation.getAmount());
+            }
             operation.setDateTransaction(LocalDate.now());
             operationRepository.save(operation);
-            return new ResponseDto("success","operation add success");
+            return new ResponseDto("success","operation add success",operation);
         }
     }
 
@@ -59,6 +70,32 @@ public class OperationServiceImpl implements IOperationService {
             return new ResponseDto("bad request","this operation not exist");
         }else {
             return new ResponseDto("success","operation",operation.get());
+        }
+    }
+
+    @Override
+    public ResponseDto deposit(String walletRef,Double amount) {
+        WalletDto wallet = walletProxy.findWalletByRef(walletRef);
+        if (wallet == null){
+            return new ResponseDto("bad request","this wallet not exist");
+        }else{
+            wallet.setBalance(wallet.getBalance()+amount);
+            walletProxy.updateWallet(wallet);
+            return new ResponseDto("success","this operation success",wallet);
+        }
+    }
+
+    @Override
+    public ResponseDto withdraw(String walletRef,Double amount) {
+        WalletDto wallet = walletProxy.findWalletByRef(walletRef);
+        if (wallet == null) {
+            return new ResponseDto("bad request","this wallet not exist");
+        }else if (wallet.getBalance() < amount){
+            return new ResponseDto("bad request","balance is than amount");
+        }else {
+            wallet.setBalance(wallet.getBalance()-amount);
+            walletProxy.updateWallet(wallet);
+            return new ResponseDto("success","this operation success",wallet);
         }
     }
 }
