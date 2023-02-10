@@ -93,7 +93,7 @@ public class OperationServiceImpl implements IOperationService {
         }else if (wallet.getBalance() < amount){
             return new ResponseDto("bad request","balance is than amount");
         }else {
-            wallet.setBalance(wallet.getBalance()-amount);
+            wallet.setBalance(wallet.getBalance() - amount);
             walletProxy.updateWallet(wallet);
             return new ResponseDto("success","this operation success",wallet);
         }

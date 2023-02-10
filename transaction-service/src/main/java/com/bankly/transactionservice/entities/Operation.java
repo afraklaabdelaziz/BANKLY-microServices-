@@ -10,15 +10,13 @@ import java.time.LocalDate;
 public class Operation implements Serializable {
     @Id
     private String id;
-    private String reference;
     private LocalDate dateTransaction;
     private Double amount;
 
     private String walletRef;
     private OperationType operationType;
 
-    public Operation(String reference, LocalDate dateTransaction, Double amount, String walletRef, OperationType operationType) {
-        this.reference = reference;
+    public Operation(LocalDate dateTransaction, Double amount, String walletRef, OperationType operationType) {
         this.dateTransaction = dateTransaction;
         this.amount = amount;
         this.walletRef = walletRef;
@@ -34,14 +32,6 @@ public class Operation implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
     }
 
     public LocalDate getDateTransaction() {
@@ -81,7 +71,6 @@ public class Operation implements Serializable {
     public String toString() {
         return "Opperation{" +
                 "id=" + id +
-                ", reference='" + reference + '\'' +
                 ", dateTransaction=" + dateTransaction +
                 ", amount=" + amount +
                 ", opperationType=" + operationType +
