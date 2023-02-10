@@ -32,7 +32,10 @@ public class WalletServiceImpl implements IWalletService {
 
     @Override
     public ResponceDto updateWallet(Wallet wallet) {
-        return null;
+        Optional<Wallet> walletFound = (Optional<Wallet>) this.findWalletByRef(wallet.getReference()).getData();
+        walletFound.get().setBalance(wallet.getBalance());
+        walletRepository.save(walletFound.get());
+       return new ResponceDto("success","wallet updated",walletFound.get());
     }
 
     @Override
@@ -53,6 +56,16 @@ public class WalletServiceImpl implements IWalletService {
     @Override
     public ResponceDto findWlletById(Long idWallet) {
         Optional<Wallet> wallet = walletRepository.findById(idWallet);
+        if (!wallet.isPresent()){
+            return new ResponceDto("bad request","wallet of this client not exist");
+        }else {
+            return new ResponceDto("success","wallet",wallet);
+        }
+    }
+
+    @Override
+    public ResponceDto findWalletByRef(String ref) {
+        Optional<Wallet> wallet = walletRepository.findWalletByReference(ref);
         if (!wallet.isPresent()){
             return new ResponceDto("bad request","wallet of this client not exist");
         }else {

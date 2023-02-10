@@ -7,6 +7,8 @@ import com.bankly.walletservice.services.IWalletService;
 import com.bankly.walletservice.utile.DtoToEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("api/v1/wallet")
 public class WalletController {
@@ -27,8 +29,18 @@ public class WalletController {
         return walletService.findWalletByCinClient(cin);
     }
 
+    @GetMapping("/wallet-by-ref/{ref}")
+    public Optional<Wallet> findWalletByRef(@PathVariable String ref){
+        return (Optional<Wallet>) walletService.findWalletByRef(ref).getData();
+    }
+
     @GetMapping("/all-wallet")
     public ResponceDto findAllWallet(){
         return walletService.findAllWallet();
+    }
+
+    @PutMapping("/update-wallet")
+    public ResponceDto updateWallet(@RequestBody Wallet wallet){
+        return walletService.updateWallet(wallet);
     }
 }

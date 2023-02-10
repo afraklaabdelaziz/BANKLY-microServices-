@@ -1,17 +1,23 @@
 package com.bankly.walletservice.dto;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 
-public class WalletDto {
-    private Long id;
+public class WalletDto implements Serializable {
     private String cinClient;
 
-    public Long getId() {
-        return id;
+    private Double balance;
+
+    public WalletDto(String cinClient, Double balance) {
+        this.cinClient = cinClient;
+        this.balance = balance;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public String getCinClient() {
@@ -27,5 +33,13 @@ public class WalletDto {
     }
 
     public WalletDto() {
+    }
+
+    @Override
+    public String toString() {
+        return "WalletDto{" +
+                "cinClient='" + cinClient + '\'' +
+                ", balance=" + balance +
+                '}';
     }
 }

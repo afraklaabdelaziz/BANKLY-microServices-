@@ -4,9 +4,11 @@ import com.bankly.walletservice.dto.ResponceDto;
 import com.bankly.walletservice.entities.Wallet;
 
 public interface IWalletService {
-    public ResponceDto addWallet(Wallet wallet);
-    public ResponceDto updateWallet(Wallet wallet);
-    public ResponceDto findAllWallet();
-    public ResponceDto findWalletByCinClient(String cin);
-    public ResponceDto findWlletById(Long idWallet);
+     ResponceDto addWallet(Wallet wallet);
+     ResponceDto updateWallet(Wallet wallet);
+     ResponceDto findAllWallet();
+     ResponceDto findWalletByCinClient(String cin);
+     ResponceDto findWlletById(Long idWallet);
+
+     ResponceDto findWalletByRef(String ref);
 }
