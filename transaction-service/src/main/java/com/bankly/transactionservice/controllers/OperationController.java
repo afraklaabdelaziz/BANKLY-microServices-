@@ -17,10 +17,8 @@ import java.util.Optional;
 @RequestMapping("api/v1/operation")
 public class OperationController {
     private IOperationService operationService;
-    private final WalletProxy walletProxy;
-    public OperationController(IOperationService operationService, WalletProxy walletProxy) {
+    public OperationController(IOperationService operationService) {
         this.operationService = operationService;
-        this.walletProxy = walletProxy;
     }
     @PostMapping("/add")
     public ResponseDto addOperation(@RequestBody OperationDto operationDto){
