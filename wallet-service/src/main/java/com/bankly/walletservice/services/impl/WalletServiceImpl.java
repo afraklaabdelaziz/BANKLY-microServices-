@@ -4,6 +4,7 @@ import com.bankly.walletservice.dto.ResponceDto;
 import com.bankly.walletservice.entities.Wallet;
 import com.bankly.walletservice.repositories.WalletRepository;
 import com.bankly.walletservice.services.IWalletService;
+import com.bankly.walletservice.utile.GenerateReference;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class WalletServiceImpl implements IWalletService {
             return new ResponceDto("bad request","cin client is required");
         }else {
             wallet.setBalance(0D);
+            wallet.setReference(GenerateReference.applyGenerateReference());
             wallet.setCreatedAt(LocalDate.now());
             walletRepository.save(wallet);
             return new ResponceDto("success","your wallet created with success");

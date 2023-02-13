@@ -1,4 +1,4 @@
-package com.bankly.gatewayservice.entities;
+package com.bankly.userservice.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

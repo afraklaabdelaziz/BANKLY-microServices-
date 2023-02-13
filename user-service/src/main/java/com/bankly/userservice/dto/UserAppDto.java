@@ -1,10 +1,8 @@
-package com.bankly.gatewayservice.dto;
+package com.bankly.userservice.dto;
 
 import java.io.Serializable;
 
 public class UserAppDto implements Serializable {
-
-    private Long id;
     private String lastName;
     private String firstName;
     private String cin;
@@ -25,14 +23,6 @@ public class UserAppDto implements Serializable {
     }
 
     public UserAppDto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getLastName() {

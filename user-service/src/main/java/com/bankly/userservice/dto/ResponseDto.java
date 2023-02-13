@@ -1,4 +1,4 @@
-package com.bankly.gatewayservice.dto;
+package com.bankly.userservice.dto;
 
 import java.io.Serializable;
 

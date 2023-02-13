@@ -1,7 +1,8 @@
-package com.bankly.gatewayservice.utiles;
+package com.bankly.userservice.utiles;
 
-import com.bankly.gatewayservice.dto.UserAppDto;
-import com.bankly.gatewayservice.entities.UserApp;
+
+import com.bankly.userservice.dto.UserAppDto;
+import com.bankly.userservice.entities.UserApp;
 import org.modelmapper.ModelMapper;
 
 public class DtoToEntity {

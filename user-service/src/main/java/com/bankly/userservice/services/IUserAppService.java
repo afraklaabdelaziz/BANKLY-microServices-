@@ -1,7 +1,8 @@
-package com.bankly.gatewayservice.services;
+package com.bankly.userservice.services;
 
-import com.bankly.gatewayservice.dto.ResponseDto;
-import com.bankly.gatewayservice.entities.UserApp;
+
+import com.bankly.userservice.dto.ResponseDto;
+import com.bankly.userservice.entities.UserApp;
 
 public interface IUserAppService {
     ResponseDto addUser(UserApp user);
@@ -13,4 +14,8 @@ public interface IUserAppService {
     ResponseDto findByphone(String phone);
 
     ResponseDto findByCin(String cin);
+
+    UserApp validateToken(String token);
+
+    ResponseDto generateToken(UserApp userApp);
 }
