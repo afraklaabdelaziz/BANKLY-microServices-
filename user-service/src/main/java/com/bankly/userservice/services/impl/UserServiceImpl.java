@@ -24,6 +24,7 @@ public class UserServiceImpl implements IUserAppService {
     private final UserAppRepository userAppRepository;
 
    private final WalletProxy walletProxy;
+
     private String jwtSingningKey = "secret";
 
 
