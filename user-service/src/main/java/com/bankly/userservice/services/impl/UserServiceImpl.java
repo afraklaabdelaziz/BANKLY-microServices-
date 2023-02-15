@@ -1,22 +1,16 @@
 package com.bankly.userservice.services.impl;
 
+import com.bankly.userservice.config.JwtUtile;
 import com.bankly.userservice.controllers.WalletProxy;
 import com.bankly.userservice.dto.ResponseDto;
 import com.bankly.userservice.dto.WalletDto;
 import com.bankly.userservice.entities.UserApp;
 import com.bankly.userservice.repositories.UserAppRepository;
 import com.bankly.userservice.services.IUserAppService;
-import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 @Service
 public class UserServiceImpl implements IUserAppService {
@@ -25,12 +19,17 @@ public class UserServiceImpl implements IUserAppService {
 
    private final WalletProxy walletProxy;
 
-    private String jwtSingningKey = "secret";
+   private PasswordEncoder passwordEncoder;
 
 
-    public UserServiceImpl(UserAppRepository userAppRepository, WalletProxy walletProxy) {
+    private JwtUtile jwtUtile;
+
+
+    public UserServiceImpl(UserAppRepository userAppRepository, WalletProxy walletProxy, PasswordEncoder passwordEncoder, JwtUtile jwtUtile) {
         this.userAppRepository = userAppRepository;
         this.walletProxy = walletProxy;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtile = jwtUtile;
     }
 
     @Override
@@ -67,6 +66,7 @@ public class UserServiceImpl implements IUserAppService {
            WalletDto walletDto = new WalletDto();
            walletDto.setCinClient(user.getCin());
            walletProxy.addWallet(walletDto);
+           user.setPassword(passwordEncoder.encode(user.getPassword()));
            userAppRepository.save(user);
            return new ResponseDto("success","user is added",user);
        }
@@ -114,58 +114,13 @@ public class UserServiceImpl implements IUserAppService {
 
     @Override
     public UserApp validateToken(String token) {
-        final String userEmail = extractUsername(token);
+        final String userEmail = jwtUtile.extractUsername(token);
         UserApp userApp = (UserApp) findByEmail(userEmail).getData();
-        if (userEmail.equals(userApp.getEmail()) && !isTokenExpired(token)){
-            generateToken(userApp);
+        if (userEmail.equals(userApp.getEmail()) && !jwtUtile.isTokenExpired(token)) {
+            jwtUtile.generateToken(userApp);
             return userApp;
-        }else {
+        } else {
             return null;
         }
     }
-
-    @Override
-    public ResponseDto generateToken(UserApp userApp) {
-         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims,userApp);
-    }
-
-    public String extractUsername(String token){
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public Date extractExpiration(String token){
-        return extractClaim(token,Claims::getExpiration);
-    }
-
-    public boolean hasClaim(String token, String claimName){
-        final  Claims claims = extractAllClaims(token);
-        return claims.get(claimName) != null;
-    }
-
-    public <T> T extractClaim(String token , Function<Claims,T> claimsResolver){
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-
-    private Claims extractAllClaims(String token){
-        return Jwts.parser().setSigningKey(jwtSingningKey).parseClaimsJws(token).getBody();
-    }
-
-    private Boolean isTokenExpired(String token){
-        return extractExpiration(token).before(new Date());
-    }
-
-
-
-    private ResponseDto createToken(Map<String,Object> claims, UserApp userDetails){
-
-        return new ResponseDto("success","token",Jwts.builder().setClaims(claims)
-                .setSubject(userDetails.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ TimeUnit.HOURS.toMillis(24)))
-                .signWith(SignatureAlgorithm.HS256,jwtSingningKey).compact());
-    }
-
 }

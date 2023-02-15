@@ -20,7 +20,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
-                throw new RuntimeException("auth information");
+                throw new RuntimeException("authorization no contains token");
             }
 
             String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
@@ -37,6 +37,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                         exchange.getRequest()
                                 .mutate()
                                 .header("X-auth-user-id", String.valueOf(userDto.getId()));
+                        System.out.println("eeeeeee   "+exchange.getPrincipal());
                         return exchange;
                     }).flatMap(chain::filter);
 

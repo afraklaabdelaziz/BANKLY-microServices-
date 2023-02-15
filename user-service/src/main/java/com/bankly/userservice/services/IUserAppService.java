@@ -17,5 +17,4 @@ public interface IUserAppService {
 
     UserApp validateToken(String token);
 
-    ResponseDto generateToken(UserApp userApp);
 }

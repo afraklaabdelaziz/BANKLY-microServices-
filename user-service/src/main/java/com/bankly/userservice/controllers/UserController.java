@@ -1,5 +1,6 @@
 package com.bankly.userservice.controllers;
 
+import com.bankly.userservice.config.JwtUtile;
 import com.bankly.userservice.dto.AutenticateRequest;
 import com.bankly.userservice.dto.ResponseDto;
 import com.bankly.userservice.dto.UserAppDto;
@@ -18,11 +19,13 @@ public class UserController {
 
     AuthenticationManager authenticationManager;
     private IUserAppService userAppService;
+    private JwtUtile jwtUtile;
 
 
-    public UserController(AuthenticationManager authenticationManager, IUserAppService userAppService) {
+    public UserController(AuthenticationManager authenticationManager, IUserAppService userAppService, JwtUtile jwtUtile) {
         this.authenticationManager = authenticationManager;
         this.userAppService = userAppService;
+        this.jwtUtile = jwtUtile;
     }
 
     @PostMapping("/register")
@@ -38,9 +41,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseDto login(@RequestBody AutenticateRequest auth){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(auth.getEmail(),auth.getPassword()));
         UserApp userApp = (UserApp) userAppService.findByEmail(auth.getEmail()).getData();
-        System.out.println(userApp);
-        return userAppService.generateToken(userApp);
+        return jwtUtile.generateToken(userApp);
     }
 }
