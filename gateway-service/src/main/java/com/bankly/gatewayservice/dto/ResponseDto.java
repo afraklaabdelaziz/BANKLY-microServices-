@@ -1,21 +1,26 @@
-package com.bankly.walletservice.dto;
+package com.bankly.gatewayservice.dto;
 
 import java.io.Serializable;
 
-public class ResponceDto implements Serializable {
+public class ResponseDto implements Serializable {
     private String status;
+
     private String message;
+
     private Object data;
 
-    public ResponceDto(String status, String message) {
+    public ResponseDto(String status, String message, Object data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+    }
+
+    public ResponseDto(String status, String message) {
         this.status = status;
         this.message = message;
     }
 
-    public ResponceDto(String status, String message, Object data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
+    public ResponseDto() {
     }
 
     public String getStatus() {

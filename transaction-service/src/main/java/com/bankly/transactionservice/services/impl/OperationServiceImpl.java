@@ -10,6 +10,7 @@ import com.bankly.transactionservice.services.IOperationService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,10 +43,16 @@ public class OperationServiceImpl implements IOperationService {
 
         else {
             if (operation.getOperationType() == OperationType.DEPOSIT){
-                this.deposit(operation.getWalletRef(), operation.getAmount());
+               ResponseDto responseDtoDeposit = this.deposit(operation.getWalletRef(), operation.getAmount());
+               if(responseDtoDeposit.getStatus().equals("bad request")){
+                   return new ResponseDto(responseDtoDeposit.getStatus(), responseDtoDeposit.getMessage());
+               }
             }else {
                 operation.setOpperationType(OperationType.WITHDRAW);
-                this.withdraw(operation.getWalletRef(), operation.getAmount());
+               ResponseDto responseDtoWithdraw  =  this.withdraw(operation.getWalletRef(), operation.getAmount());
+               if (responseDtoWithdraw.getStatus().equals("bad request")){
+                   return new ResponseDto(responseDtoWithdraw.getStatus(),responseDtoWithdraw.getMessage());
+               }
             }
             operation.setDateTransaction(LocalDate.now());
             operationRepository.save(operation);
@@ -87,7 +94,7 @@ public class OperationServiceImpl implements IOperationService {
 
     @Override
     public ResponseDto withdraw(String walletRef,Double amount) {
-        WalletDto wallet = walletProxy.findWalletByRef(walletRef);
+        WalletDto wallet =  walletProxy.findWalletByRef(walletRef);
         if (wallet == null) {
             return new ResponseDto("bad request","this wallet not exist");
         }else if (wallet.getBalance() < amount){
@@ -97,5 +104,13 @@ public class OperationServiceImpl implements IOperationService {
             walletProxy.updateWallet(wallet);
             return new ResponseDto("success","this operation success",wallet);
         }
+    }
+
+    @Override
+    public ResponseDto findByWalletRef(String walletRef, String cin) {
+        List<WalletDto> walletsOfClient = walletProxy.findWalletsClientByCin(cin);
+        List<Operation> operations = operationRepository.findOperationByWalletRef(walletRef);
+        ResponseDto responseDto = new ResponseDto("success","wallets of client",walletsOfClient);
+        return new ResponseDto("success","operations of wallet "+walletRef,operations);
     }
 }

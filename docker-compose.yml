@@ -7,11 +7,12 @@ services:
       - "8761:8761"
   gateway:
     image: gateway-service
-    build: gateway-service
+    build: gateway-service/
     ports:
       - "8081:8081"
-    depends_on:
-      - eureka
+    environment:
+      EUREKASERVER_URI: "http://eureka:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
 
   user:
     image: user-service

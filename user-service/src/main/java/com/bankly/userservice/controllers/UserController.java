@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/validate-token")
-    public UserApp validateToken(@PathParam("token") String token){
+    public ResponseDto validateToken(@PathParam("token") String token){
         return userAppService.validateToken(token);
     }
 

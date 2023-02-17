@@ -113,14 +113,18 @@ public class UserServiceImpl implements IUserAppService {
     }
 
     @Override
-    public UserApp validateToken(String token) {
+    public ResponseDto validateToken(String token) {
         final String userEmail = jwtUtile.extractUsername(token);
-        UserApp userApp = (UserApp) findByEmail(userEmail).getData();
-        if (userEmail.equals(userApp.getEmail()) && !jwtUtile.isTokenExpired(token)) {
-            jwtUtile.generateToken(userApp);
-            return userApp;
-        } else {
-            return null;
-        }
+       Optional<UserApp> userApp =  userAppRepository.findByEmail(userEmail);
+
+       if (!userApp.isPresent()){
+           return new ResponseDto("bad request","user not found");
+       }
+        else if (userEmail.equals(userApp.get().getEmail()) && !jwtUtile.isTokenExpired(token)) {
+            jwtUtile.generateToken(userApp.get());
+            return new ResponseDto("success","user user",userApp);
+        }else{
+           return new ResponseDto("success","no user email of token or token expired");
+       }
     }
 }

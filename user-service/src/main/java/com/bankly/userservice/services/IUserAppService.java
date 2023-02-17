@@ -15,6 +15,6 @@ public interface IUserAppService {
 
     ResponseDto findByCin(String cin);
 
-    UserApp validateToken(String token);
+    ResponseDto validateToken(String token);
 
 }

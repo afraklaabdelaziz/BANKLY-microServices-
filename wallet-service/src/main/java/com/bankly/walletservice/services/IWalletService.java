@@ -1,14 +1,14 @@
 package com.bankly.walletservice.services;
 
-import com.bankly.walletservice.dto.ResponceDto;
+import com.bankly.walletservice.dto.ResponseDto;
 import com.bankly.walletservice.entities.Wallet;
 
 public interface IWalletService {
-     ResponceDto addWallet(Wallet wallet);
-     ResponceDto updateWallet(Wallet wallet);
-     ResponceDto findAllWallet();
-     ResponceDto findWalletByCinClient(String cin);
-     ResponceDto findWlletById(Long idWallet);
+     ResponseDto addWallet(Wallet wallet);
+     ResponseDto updateWallet(Wallet wallet);
+     ResponseDto findAllWallet();
+     ResponseDto findWalletByCinClient(String cin);
+     ResponseDto findWlletById(Long idWallet);
 
-     ResponceDto findWalletByRef(String ref);
+     ResponseDto findWalletByRef(String ref);
 }

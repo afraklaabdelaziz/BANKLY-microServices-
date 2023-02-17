@@ -1,6 +1,6 @@
 package com.bankly.walletservice.services.impl;
 
-import com.bankly.walletservice.dto.ResponceDto;
+import com.bankly.walletservice.dto.ResponseDto;
 import com.bankly.walletservice.entities.Wallet;
 import com.bankly.walletservice.repositories.WalletRepository;
 import com.bankly.walletservice.services.IWalletService;
@@ -18,60 +18,56 @@ public class WalletServiceImpl implements IWalletService {
     }
 
     @Override
-    public ResponceDto addWallet(Wallet wallet) {
+    public ResponseDto addWallet(Wallet wallet) {
         if (wallet == null){
-            return new ResponceDto("bad request","wallet is null");
+            return new ResponseDto("bad request","wallet is null");
         } else if (wallet.getCinClient().isEmpty()) {
-            return new ResponceDto("bad request","cin client is required");
+            return new ResponseDto("bad request","cin client is required");
         }else {
             wallet.setBalance(0D);
             wallet.setReference(GenerateReference.applyGenerateReference());
             wallet.setCreatedAt(LocalDate.now());
             walletRepository.save(wallet);
-            return new ResponceDto("success","your wallet created with success");
+            return new ResponseDto("success","your wallet created with success");
         }
     }
 
     @Override
-    public ResponceDto updateWallet(Wallet wallet) {
+    public ResponseDto updateWallet(Wallet wallet) {
         Optional<Wallet> walletFound = (Optional<Wallet>) this.findWalletByRef(wallet.getReference()).getData();
         walletFound.get().setBalance(wallet.getBalance());
         walletRepository.save(walletFound.get());
-       return new ResponceDto("success","wallet updated",walletFound.get());
+       return new ResponseDto("success","wallet updated",walletFound.get());
     }
 
     @Override
-    public ResponceDto findAllWallet() {
-        return new ResponceDto("success","all wallets",walletRepository.findAll());
+    public ResponseDto findAllWallet() {
+        return new ResponseDto("success","all wallets",walletRepository.findAll());
     }
 
     @Override
-    public ResponceDto findWalletByCinClient(String cin) {
-        Optional<Wallet> wallet = walletRepository.findByCinClient(cin);
-        if (!wallet.isPresent()){
-            return new ResponceDto("bad request","wallet of this client not exist");
-        }else {
-            return new ResponceDto("success","wallet of client port cin "+cin,wallet);
-        }
+    public ResponseDto findWalletByCinClient(String cin) {
+
+            return new ResponseDto("success","wallet of client port cin "+cin,walletRepository.findByCinClient(cin));
     }
 
     @Override
-    public ResponceDto findWlletById(Long idWallet) {
+    public ResponseDto findWlletById(Long idWallet) {
         Optional<Wallet> wallet = walletRepository.findById(idWallet);
         if (!wallet.isPresent()){
-            return new ResponceDto("bad request","wallet of this client not exist");
+            return new ResponseDto("bad request","wallet of this client not exist");
         }else {
-            return new ResponceDto("success","wallet",wallet);
+            return new ResponseDto("success","wallet",wallet);
         }
     }
 
     @Override
-    public ResponceDto findWalletByRef(String ref) {
+    public ResponseDto findWalletByRef(String ref) {
         Optional<Wallet> wallet = walletRepository.findWalletByReference(ref);
         if (!wallet.isPresent()){
-            return new ResponceDto("bad request","wallet of this client not exist");
+            return new ResponseDto("bad request","wallet of this client not exist");
         }else {
-            return new ResponceDto("success","wallet",wallet);
+            return new ResponseDto("success","wallet",wallet);
         }
     }
 }

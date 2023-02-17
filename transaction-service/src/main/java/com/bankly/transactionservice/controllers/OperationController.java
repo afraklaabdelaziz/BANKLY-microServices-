@@ -42,4 +42,9 @@ public class OperationController {
     public ResponseDto findOneOperation(@PathVariable String  id){
         return operationService.findOne(id);
     }
+
+    @GetMapping("/operation-of-client/{cin}/wallet-ref/{walletRef}")
+    public ResponseDto operationsOfClient(@PathVariable String  cin,@PathVariable String walletRef){
+        return operationService.findByWalletRef(walletRef,cin);
+    }
 }

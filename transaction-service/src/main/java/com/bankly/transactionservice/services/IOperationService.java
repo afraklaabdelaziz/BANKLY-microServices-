@@ -10,5 +10,5 @@ public interface IOperationService {
      ResponseDto findOne(String idOperation);
      ResponseDto deposit(String walletRef,Double amount);
      ResponseDto withdraw(String walletRef,Double amount);
-
+     ResponseDto findByWalletRef(String walletRef, String cin);
 }
